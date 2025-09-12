@@ -40,6 +40,7 @@ public class CourierSteps {
 
     }
 
+
     @Step("Получение id курьера")
     public int getIdCourier(CourierLoginJson courierLoginJson) {
         Response response = courierLogin(courierLoginJson)
