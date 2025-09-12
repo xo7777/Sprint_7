@@ -1,3 +1,5 @@
+package scooter.pojo;
+
 public class CourierLoginJson {
     private String login;
     private String password;

@@ -1,3 +1,5 @@
+package scooter.pojo;
+
 import java.util.List;
 
 public class OrderCreateJson {

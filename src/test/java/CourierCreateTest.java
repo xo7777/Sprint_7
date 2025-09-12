@@ -1,14 +1,22 @@
 import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
+import org.junit.After;
 import org.junit.Test;
+import scooter.pojo.CourierCreateJson;
+import scooter.pojo.CourierLoginJson;
+import scooter.Constants;
+import scooter.steps.CourierSteps;
 
 
 import static org.hamcrest.CoreMatchers.equalTo;
 
 public class CourierCreateTest {
-    public static String login = "ahmedjhon198881";
-    public static String password = "123658";
-    public static String firstName = "molnyamcquin";
+    private String login = "ahmedjhon198881";
+    private String password = "123658";
+    private String firstName = "molnyamcquin";
+    private int courierId;
+    private CourierSteps courierSteps;
+
 
 
 
@@ -25,7 +33,7 @@ public class CourierCreateTest {
                 .assertThat().body("ok", equalTo(true))
                 .and()
                 .statusCode(201);
-        courierSteps.getIdAndDeleteCourier(courierLoginJson);
+        int courierId = courierSteps.getIdCourier(courierLoginJson);
     }
 
     @Test
@@ -46,7 +54,7 @@ public class CourierCreateTest {
                 .assertThat().body("message", equalTo(Constants.MESSAGE_LOGIN_IS_BUSY))
                 .and()
                 .statusCode(409);
-        courierSteps.getIdAndDeleteCourier(courierLoginJson);
+        int courierId = courierSteps.getIdCourier(courierLoginJson);
     }
 
     @Test
@@ -75,4 +83,13 @@ public class CourierCreateTest {
                 .statusCode(400);
     }
 
+
+    @After
+    public void deleteData(){
+
+        if (courierId != 0){
+        courierSteps.courierDelete(courierId);
+        }
+
+    }
 }

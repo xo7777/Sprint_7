@@ -1,3 +1,7 @@
+import scooter.pojo.CourierCreateJson;
+import scooter.pojo.CourierLoginJson;
+import scooter.Constants;
+import scooter.steps.CourierSteps;
 import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
 import org.junit.Test;
@@ -25,7 +29,7 @@ public class CourierLoginTest {
                 .assertThat().body("id", notNullValue())
                 .and()
                 .statusCode(200);
-        courierSteps.getIdAndDeleteCourier(courierLoginJson);
+
     }
 
     @Test
@@ -42,7 +46,7 @@ public class CourierLoginTest {
                 .and()
                 .statusCode(400);
         CourierLoginJson courierLoginJson = new CourierLoginJson(login, password);
-        courierSteps.getIdAndDeleteCourier(courierLoginJson);
+
     }
 
     @Test
@@ -59,7 +63,7 @@ public class CourierLoginTest {
                 .and()
                 .statusCode(400);
         CourierLoginJson courierLoginJson = new CourierLoginJson(login, password);
-        courierSteps.getIdAndDeleteCourier(courierLoginJson);
+
     }
 
 

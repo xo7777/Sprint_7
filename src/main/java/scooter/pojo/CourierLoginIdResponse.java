@@ -1,3 +1,5 @@
+package scooter.pojo;
+
 public class CourierLoginIdResponse {
     private int id;
 

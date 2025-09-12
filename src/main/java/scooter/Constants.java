@@ -1,3 +1,5 @@
+package scooter;
+
 public class Constants {
     public static String SCOOTER_URL = "http://qa-scooter.praktikum-services.ru/";
     public static String COURIER_CREATE = "/api/v1/courier";
