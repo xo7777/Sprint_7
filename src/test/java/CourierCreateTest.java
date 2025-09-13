@@ -1,5 +1,6 @@
 import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
+import io.restassured.response.Response;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,19 +14,22 @@ import static scooter.Constants.MESSAGE_LOGIN_IS_BUSY;
 import static scooter.Constants.MESSAGE_NOT_ENOUGH_DATA_FOR_CREATE_ACCOUNT;
 
 public class CourierCreateTest {
-    public static String login = "ahmedjhon198881";
+    public static String login = "ahmedjhon19993";
     public static String password = "123658";
     public static String firstName = "molnyamcquin";
     public static CourierSteps courierSteps;
     public static CourierLoginJson courierLoginJson;
     public static CourierCreateJson courierCreateJson;
     public static int courierId;
+    public static Response courierCreate;
 
     @Before
     public void createCourier(){
         courierCreateJson = new CourierCreateJson(login, password, firstName);
         courierLoginJson = new CourierLoginJson(login, password);
         courierSteps = new CourierSteps();
+        courierCreate = courierSteps.courierCreate(courierCreateJson);
+        courierId = courierSteps.getIdCourier(courierLoginJson);
     }
 
     @Test
@@ -34,12 +38,12 @@ public class CourierCreateTest {
 
     public void createNewCourier() {
 
-        courierSteps.courierCreate(courierCreateJson)
+        courierCreate
                 .then()
                 .assertThat().body("ok", equalTo(true))
                 .and()
                 .statusCode(201);
-        courierId = courierSteps.getIdCourier(courierLoginJson);
+
     }
 
     @Test
@@ -48,7 +52,7 @@ public class CourierCreateTest {
 
     public void createCourierWithSameLogin() {
 
-        courierSteps.courierCreate(courierCreateJson)
+        courierCreate
                 .then()
                 .assertThat().body("ok", equalTo(true))
                 .and()
@@ -58,7 +62,7 @@ public class CourierCreateTest {
                 .assertThat().body("message", equalTo(MESSAGE_LOGIN_IS_BUSY))
                 .and()
                 .statusCode(409);
-        courierId = courierSteps.getIdCourier(courierLoginJson);
+
     }
 
     @Test
@@ -68,10 +72,12 @@ public class CourierCreateTest {
     public void createCourierWithoutLogin() {
         courierCreateJson.setLogin("");
         courierSteps.courierCreate(courierCreateJson)
+
                 .then()
                 .assertThat().body("message", equalTo(MESSAGE_NOT_ENOUGH_DATA_FOR_CREATE_ACCOUNT))
                 .and()
                 .statusCode(400);
+
     }
     @Test
     @DisplayName("Создание курьера без пароля")
@@ -83,6 +89,7 @@ public class CourierCreateTest {
                 .assertThat().body("message", equalTo(MESSAGE_NOT_ENOUGH_DATA_FOR_CREATE_ACCOUNT))
                 .and()
                 .statusCode(400);
+
     }
 @After
 public void deleteData(){
