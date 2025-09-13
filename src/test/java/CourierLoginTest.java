@@ -24,18 +24,19 @@ public class CourierLoginTest {
     public static Response courierCreate;
 
     @Before
-    public void createCourier(){
+    public void createCourier() {
         courierCreateJson = new CourierCreateJson(login, password, firstName);
         courierLoginJson = new CourierLoginJson(login, password);
         courierSteps = new CourierSteps();
         courierCreate = courierSteps.courierCreate(courierCreateJson);
         courierId = courierSteps.getIdCourier(courierLoginJson);
     }
+
     @Test
     @DisplayName("Логин курьера")
     @Description("Успешная авторизация курьера")
 
-    public void courierLogin () {
+    public void courierLogin() {
 
         courierSteps.courierLogin(courierLoginJson)
                 .then()
@@ -47,7 +48,7 @@ public class CourierLoginTest {
     @Test
     @DisplayName("Авторизация курьера без логина")
     @Description("Ошибка при авторизации курьера без логина")
-    public void courierLoginWithoutLogin () {
+    public void courierLoginWithoutLogin() {
         courierLoginJson.setLogin("");
         courierSteps.courierLogin(courierLoginJson)
                 .then()
@@ -59,7 +60,7 @@ public class CourierLoginTest {
     @Test
     @DisplayName("Авторизация курьера без пароля")
     @Description("Ошибка при авторизации курьера без пароля")
-    public void courierLoginWithoutPassword () {
+    public void courierLoginWithoutPassword() {
         courierLoginJson.setPassword("");
         courierSteps.courierLogin(courierLoginJson)
                 .then()
@@ -72,7 +73,7 @@ public class CourierLoginTest {
     @Test
     @DisplayName("Авторизация несуществующего курьера")
     @Description("Ошибка при авторизации несуществующего курьера")
-    public void courierLoginWithNonExistentLogin () {
+    public void courierLoginWithNonExistentLogin() {
         courierLoginJson.setLogin("fdkfdf");
         courierLoginJson.setPassword("12354");
         courierSteps.courierLogin(courierLoginJson)
@@ -81,8 +82,9 @@ public class CourierLoginTest {
                 .and()
                 .statusCode(404);
     }
+
     @After
-    public void deleteData(){
+    public void deleteData() {
         courierSteps.courierDelete(courierId);
     }
 }

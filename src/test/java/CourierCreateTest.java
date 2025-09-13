@@ -24,7 +24,7 @@ public class CourierCreateTest {
     public static Response courierCreate;
 
     @Before
-    public void createCourier(){
+    public void createCourier() {
         courierCreateJson = new CourierCreateJson(login, password, firstName);
         courierLoginJson = new CourierLoginJson(login, password);
         courierSteps = new CourierSteps();
@@ -79,6 +79,7 @@ public class CourierCreateTest {
                 .statusCode(400);
 
     }
+
     @Test
     @DisplayName("Создание курьера без пароля")
     @Description("Появление ошибки при создании курьера без пароля")
@@ -91,8 +92,9 @@ public class CourierCreateTest {
                 .statusCode(400);
 
     }
-@After
-public void deleteData(){
+
+    @After
+    public void deleteData() {
         courierSteps.courierDelete(courierId);
     }
 
