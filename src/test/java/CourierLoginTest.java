@@ -1,5 +1,6 @@
 import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
+import io.restassured.response.Response;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,19 +14,22 @@ import static scooter.Constants.MESSAGE_NOT_ENOUGH_DATA_FOR_ENTRY;
 import static scooter.Constants.MESSAGE_NOT_FOUND_ACCOUNT;
 
 public class CourierLoginTest {
-    public static String login = "ahmedjhon198881";
+    public static String login = "ahmedjhon199933";
     public static String password = "123658";
     public static String firstName = "molnyamcquin";
     public static CourierSteps courierSteps;
     public static CourierLoginJson courierLoginJson;
     public static CourierCreateJson courierCreateJson;
     public static int courierId;
+    public static Response courierCreate;
 
     @Before
-    public void createCourier() {
+    public void createCourier(){
         courierCreateJson = new CourierCreateJson(login, password, firstName);
         courierLoginJson = new CourierLoginJson(login, password);
         courierSteps = new CourierSteps();
+        courierCreate = courierSteps.courierCreate(courierCreateJson);
+        courierId = courierSteps.getIdCourier(courierLoginJson);
     }
     @Test
     @DisplayName("Логин курьера")
@@ -33,13 +37,11 @@ public class CourierLoginTest {
 
     public void courierLogin () {
 
-        courierSteps.courierCreate(courierCreateJson);
         courierSteps.courierLogin(courierLoginJson)
                 .then()
                 .assertThat().body("id", notNullValue())
                 .and()
                 .statusCode(200);
-        courierId = courierSteps.getIdCourier(courierLoginJson);
     }
 
     @Test
@@ -47,14 +49,11 @@ public class CourierLoginTest {
     @Description("Ошибка при авторизации курьера без логина")
     public void courierLoginWithoutLogin () {
         courierLoginJson.setLogin("");
-        courierSteps.courierCreate(courierCreateJson);
         courierSteps.courierLogin(courierLoginJson)
                 .then()
                 .assertThat().body("message", equalTo(MESSAGE_NOT_ENOUGH_DATA_FOR_ENTRY))
                 .and()
                 .statusCode(400);
-        CourierLoginJson courierLoginJson = new CourierLoginJson(login, password);
-        courierId = courierSteps.getIdCourier(courierLoginJson);
     }
 
     @Test
@@ -62,14 +61,11 @@ public class CourierLoginTest {
     @Description("Ошибка при авторизации курьера без пароля")
     public void courierLoginWithoutPassword () {
         courierLoginJson.setPassword("");
-        courierSteps.courierCreate(courierCreateJson);
         courierSteps.courierLogin(courierLoginJson)
                 .then()
                 .assertThat().body("message", equalTo(MESSAGE_NOT_ENOUGH_DATA_FOR_ENTRY))
                 .and()
                 .statusCode(400);
-        CourierLoginJson courierLoginJson = new CourierLoginJson(login, password);
-        courierId = courierSteps.getIdCourier(courierLoginJson);
     }
 
 
@@ -77,8 +73,8 @@ public class CourierLoginTest {
     @DisplayName("Авторизация несуществующего курьера")
     @Description("Ошибка при авторизации несуществующего курьера")
     public void courierLoginWithNonExistentLogin () {
-        courierCreateJson.setLogin("fdkfdf");
-        courierCreateJson.setPassword("12354");
+        courierLoginJson.setLogin("fdkfdf");
+        courierLoginJson.setPassword("12354");
         courierSteps.courierLogin(courierLoginJson)
                 .then()
                 .assertThat().body("message", equalTo(MESSAGE_NOT_FOUND_ACCOUNT))
